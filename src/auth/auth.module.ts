@@ -1,11 +1,28 @@
 import { UserModule } from '@app/user/user.module';
-import { Global, Module } from '@nestjs/common';
+import { Global, Module, Provider } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { AuthController } from './auth.controller';
+
+const clientProxyProvider: Provider = {
+    provide: 'USER_SERVICE',
+    useFactory: (): ClientProxy => {
+        return ClientProxyFactory.create({
+            transport: Transport.RMQ,
+            options: {
+                urls: [process.env.RMQ_URL],
+                queue: process.env.USER_SERVICE_QUEUE,
+                queueOptions: { durable: false },
+            },
+        });
+    },
+};
 
 @Global()
 @Module({
     imports: [UserModule],
-    providers: [AuthService],
+    providers: [AuthService, clientProxyProvider],
     exports: [AuthService],
+    controllers: [AuthController],
 })
 export class AuthModule {}
