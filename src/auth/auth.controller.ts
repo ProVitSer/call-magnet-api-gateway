@@ -2,6 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { Observable } from 'rxjs';
+import { VerifyDto } from './dto/verify-profile.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -10,6 +11,11 @@ export class AuthController {
     @Post('register')
     async register(@Body() body: RegisterUserDto): Promise<Observable<{ message: string }>> {
         return await this.authService.registerUser(body);
+    }
+
+    @Post('verify-user')
+    async login(@Body() body: VerifyDto): Promise<Observable<{ message: string }>> {
+        return await this.authService.verifyUser(body);
     }
 
     // @Post('login')
