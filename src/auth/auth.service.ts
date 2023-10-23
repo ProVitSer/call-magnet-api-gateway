@@ -3,6 +3,8 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { Observable, catchError, firstValueFrom, throwError } from 'rxjs';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { VerifyDto } from './dto/verify-profile.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 export class AuthService {
     constructor(@Inject('USER_SERVICE') private userServiceClient: ClientProxy) {}
@@ -25,5 +27,21 @@ export class AuthService {
 
     public async validateToken(token: string) {
         return await firstValueFrom(this.userServiceClient.send({ cmd: 'validate-token' }, token));
+    }
+
+    public async resetPassword(data: ResetPasswordDto) {
+        return await firstValueFrom(
+            this.userServiceClient
+                .send({ cmd: 'reset-password' }, data)
+                .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
+        );
+    }
+
+    public async updatePassword(data: UpdatePasswordDto) {
+        return await firstValueFrom(
+            this.userServiceClient
+                .send({ cmd: 'update-password' }, data)
+                .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
+        );
     }
 }
