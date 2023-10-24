@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { UtilsService } from '@app/utils/utils.service';
 
@@ -10,6 +10,5 @@ export class LoginUserDto {
 
     @Transform(({ value }) => UtilsService.trim(value))
     @IsNotEmpty({ message: 'Password is required.' })
-    @IsOptional()
-    password?: string;
+    password: string;
 }
