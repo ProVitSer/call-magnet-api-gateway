@@ -15,12 +15,15 @@ export class AllExceptionsFilter implements ExceptionFilter {
         switch (exception.constructor) {
             case HttpException:
                 httpStatus = (exception as HttpException).getStatus();
-                message = exception?.response?.error || exception?.message || 'Internal server error';
+                message = Array.isArray(exception?.response)
+                    ? exception?.response
+                    : exception?.response?.error || exception?.message || 'Internal server error';
                 break;
             case RpcException:
                 const error: any = exception.getError();
+
                 httpStatus = error?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;
-                message = error.message || 'RpcException';
+                message = error?.message || 'RpcException';
                 break;
             default:
                 if ('Rpc Exception' === exception.message) {
