@@ -5,9 +5,10 @@ import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservice
 import { AuthController } from './auth.controller';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
+import { ClientProxyProvide } from '@app/platform-types/client-proxy/types';
 
 const clientProxyProvider: Provider = {
-    provide: 'USER_SERVICE',
+    provide: ClientProxyProvide.user,
     useFactory: (): ClientProxy => {
         return ClientProxyFactory.create({
             transport: Transport.RMQ,

@@ -3,9 +3,10 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 import { Provider } from '@nestjs/common';
+import { ClientProxyProvide } from '@app/platform-types/client-proxy/types';
 
 const clientProxyProvider: Provider = {
-    provide: 'USER_SERVICE',
+    provide: ClientProxyProvide.user,
     useFactory: (): ClientProxy => {
         return ClientProxyFactory.create({
             transport: Transport.RMQ,

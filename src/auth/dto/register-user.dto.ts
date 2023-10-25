@@ -1,25 +1,35 @@
+import {
+    EMAIL_IS_NOT_EMPTY,
+    FIRST_IS_NOT_EMPTY,
+    FIRST_SHOULD_STRING,
+    LASTNAME_IS_NOT_EMPTY,
+    LASTNAME_SHOULD_STRING,
+    MIN_LENGTH_PASSWORD,
+    PASSWORD_SHOULD_STRING,
+    PHONE_SHOULD_STRING,
+} from '@app/common/constant/dto.constants';
 import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, MinLength } from 'class-validator';
 
 export class RegisterUserDto {
-    @IsString({ message: 'firstname should be string' })
-    @IsNotEmpty({ message: 'firstname is required.' })
+    @IsString({ message: FIRST_SHOULD_STRING })
+    @IsNotEmpty({ message: FIRST_IS_NOT_EMPTY })
     @MinLength(2)
     firstname: string;
 
-    @IsString({ message: 'lastname should be string' })
-    @IsNotEmpty({ message: 'lastname is required.' })
+    @IsString({ message: LASTNAME_SHOULD_STRING })
+    @IsNotEmpty({ message: LASTNAME_IS_NOT_EMPTY })
     @MinLength(2)
     lastname: string;
 
     @IsEmail()
-    @IsNotEmpty({ message: 'email is required.' })
+    @IsNotEmpty({ message: EMAIL_IS_NOT_EMPTY })
     email: string;
 
     @IsPhoneNumber()
-    @IsNotEmpty({ message: 'phoneNumber is required.' })
+    @IsNotEmpty({ message: PHONE_SHOULD_STRING })
     phoneNumber: number;
 
-    @IsNotEmpty({ message: 'Password is required.' })
-    @MinLength(8)
+    @IsNotEmpty({ message: PASSWORD_SHOULD_STRING })
+    @MinLength(8, { message: MIN_LENGTH_PASSWORD })
     password: string;
 }
