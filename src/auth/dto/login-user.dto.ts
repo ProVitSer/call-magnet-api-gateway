@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { UtilsService } from '@app/utils/utils.service';
+import { UtilsService } from '@app/common/utils/utils.service';
 
 export class LoginUserDto {
     @IsEmail()

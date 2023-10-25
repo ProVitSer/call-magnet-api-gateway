@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { Observable } from 'rxjs';
@@ -6,9 +6,9 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RefreshTokenGuard } from './guards/refresh-token-auth.guard';
-import { GetCurrentClientId } from '@app/decorators/get-current-client-id.decorator';
+import { GetCurrentClientId } from '@app/common/decorators/get-current-client-id.decorator';
 import { JwtAuthGuard } from './guards/access-token-auth.guard';
-import { GetCurrentUser } from '@app/decorators/get-current-user.decorator';
+import { GetCurrentUser } from '@app/common/decorators/get-current-user.decorator';
 import { VerifyDto } from './dto/verify-profile.dto';
 
 @Controller('auth')

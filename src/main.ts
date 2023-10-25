@@ -1,10 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { GlobalValidationPipe } from './pipes/global-validation.pipe';
+import { GlobalValidationPipe } from './common/pipes/global-validation.pipe';
 import * as cookieParser from 'cookie-parser';
 import httpsConfig from '@app/config/https.provider';
 import { loadCorsConfiguration } from './config/cors.provider';
-import { AllExceptionsFilter } from './exceptions/exception-handler';
+import { AllExceptionsFilter } from './common/exception-handler';
 
 async function bootstrap() {
     const httpsOptions = httpsConfig();
