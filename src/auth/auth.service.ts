@@ -1,67 +1,76 @@
 import { Inject } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { Observable, catchError, firstValueFrom, throwError } from 'rxjs';
+import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import {
+    BaseResponse,
+    LogoutResponse,
+    RegisterUserResponse,
+    ResetPasswordResponse,
+    TokensResponse,
+} from '@app/platform-types/auth/interfaces';
+import { VerifyUserResponse } from '@app/platform-types/auth/types';
+import { MessagePatternCmd } from '@app/platform-types/client-proxy/types';
 
 export class AuthService {
     constructor(@Inject('USER_SERVICE') private userServiceClient: ClientProxy) {}
 
-    public async registerUser(data: RegisterUserDto): Promise<Observable<{ message: string }>> {
-        return await firstValueFrom(
+    public async registerUser(data: RegisterUserDto): Promise<RegisterUserResponse> {
+        return await firstValueFrom<RegisterUserResponse>(
             this.userServiceClient
-                .send({ cmd: 'register' }, data)
+                .send({ cmd: MessagePatternCmd.register }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
 
-    public async verifyUser(data: VerifyDto): Promise<Observable<{ message: string }>> {
-        return await firstValueFrom(
+    public async verifyUser(data: VerifyDto): Promise<VerifyUserResponse> {
+        return await firstValueFrom<VerifyUserResponse>(
             this.userServiceClient
-                .send({ cmd: 'verify-user' }, data)
+                .send({ cmd: MessagePatternCmd.verifyUser }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
 
-    public async resetPassword(data: ResetPasswordDto) {
-        return await firstValueFrom(
+    public async resetPassword(data: ResetPasswordDto): Promise<ResetPasswordResponse> {
+        return await firstValueFrom<ResetPasswordResponse>(
             this.userServiceClient
-                .send({ cmd: 'reset-password' }, data)
+                .send({ cmd: MessagePatternCmd.resetPassword }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
 
-    public async updatePassword(data: UpdatePasswordDto) {
-        return await firstValueFrom(
+    public async updatePassword(data: UpdatePasswordDto): Promise<BaseResponse> {
+        return await firstValueFrom<BaseResponse>(
             this.userServiceClient
-                .send({ cmd: 'update-password' }, data)
+                .send({ cmd: MessagePatternCmd.updatePassword }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
 
-    public async login(data: LoginUserDto) {
-        return await firstValueFrom(
+    public async login(data: LoginUserDto): Promise<TokensResponse> {
+        return await firstValueFrom<TokensResponse>(
             this.userServiceClient
-                .send({ cmd: 'login' }, data)
+                .send({ cmd: MessagePatternCmd.login }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
 
-    public async logout(clientId: string) {
-        return await firstValueFrom(
+    public async logout(clientId: string): Promise<LogoutResponse> {
+        return await firstValueFrom<LogoutResponse>(
             this.userServiceClient
-                .send({ cmd: 'logout' }, clientId)
+                .send({ cmd: MessagePatternCmd.logout }, clientId)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
 
-    public async refreshToken(clientId: string, refreshToken: string) {
-        return await firstValueFrom(
+    public async refreshToken(clientId: string, refreshToken: string): Promise<TokensResponse> {
+        return await firstValueFrom<TokensResponse>(
             this.userServiceClient
-                .send({ cmd: 'refresh-token' }, { clientId, refreshToken })
+                .send({ cmd: MessagePatternCmd.refreshToken }, { clientId, refreshToken })
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
@@ -69,7 +78,7 @@ export class AuthService {
     public async findUserByClientId(clientId: string) {
         return await firstValueFrom(
             this.userServiceClient
-                .send({ cmd: 'find-user-by-clientId' }, clientId)
+                .send({ cmd: MessagePatternCmd.findUserByVlientId }, clientId)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }

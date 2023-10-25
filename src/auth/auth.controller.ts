@@ -1,7 +1,6 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Get, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { Observable } from 'rxjs';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -10,47 +9,62 @@ import { GetCurrentClientId } from '@app/common/decorators/get-current-client-id
 import { JwtAuthGuard } from './guards/access-token-auth.guard';
 import { GetCurrentUser } from '@app/common/decorators/get-current-user.decorator';
 import { VerifyDto } from './dto/verify-profile.dto';
+import { HttpResponseService } from '@app/http/http.service';
+import { BaseResponse, LogoutResponse, RegisterUserResponse, TokensResponse } from '@app/platform-types/auth/interfaces';
+import { Request, Response } from 'express';
+import { VerifyUserResponse } from '@app/platform-types/auth/types';
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post('register')
-    async register(@Body() body: RegisterUserDto): Promise<Observable<{ message: string }>> {
-        return await this.authService.registerUser(body);
+    async register(@Req() req: Request, @Res() res: Response, @Body() body: RegisterUserDto) {
+        const response = await this.authService.registerUser(body);
+        return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.CREATED, response);
     }
 
-    @HttpCode(HttpStatus.OK)
     @Post('update-password')
-    updatePassword(@Body() body: UpdatePasswordDto) {
-        return this.authService.updatePassword(body);
+    async updatePassword(@Req() req: Request, @Res() res: Response, @Body() body: UpdatePasswordDto) {
+        const response = await this.authService.updatePassword(body);
+        return HttpResponseService.response<BaseResponse>(req, res, HttpStatus.OK, response);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('reset-password')
-    async resetPassword(@Body() body: ResetPasswordDto): Promise<Observable<{ message: string }>> {
-        return await this.authService.resetPassword(body);
+    async resetPassword(@Req() req: Request, @Res() res: Response, @Body() body: ResetPasswordDto) {
+        const response = await this.authService.resetPassword(body);
+        return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.OK, response);
     }
 
     @Post('verify-user')
-    async verifyUser(@Body() body: VerifyDto): Promise<Observable<{ message: string }>> {
-        return await this.authService.verifyUser(body);
+    async verifyUser(@Req() req: Request, @Res() res: Response, @Body() body: VerifyDto) {
+        const response = await this.authService.verifyUser(body);
+        return HttpResponseService.response<VerifyUserResponse>(req, res, HttpStatus.OK, response);
     }
 
     @Post('login')
-    async login(@Body() body: LoginUserDto): Promise<Observable<{ message: string }>> {
-        return await this.authService.login(body);
+    async login(@Req() req: Request, @Res() res: Response, @Body() body: LoginUserDto) {
+        const response = await this.authService.login(body);
+        return HttpResponseService.response<TokensResponse>(req, res, HttpStatus.OK, response);
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('logout')
-    async logout(@GetCurrentClientId() clientId: string): Promise<void> {
-        return await this.authService.logout(clientId);
+    async logout(@Req() req: Request, @Res() res: Response, @GetCurrentClientId() clientId: string) {
+        const response = await this.authService.logout(clientId);
+        return HttpResponseService.response<LogoutResponse>(req, res, HttpStatus.OK, response);
     }
 
     @UseGuards(RefreshTokenGuard)
     @Get('refresh')
-    async refreshToken(@GetCurrentClientId() clientId: string, @GetCurrentUser('refreshToken') refreshToken: string): Promise<void> {
-        return await this.authService.refreshToken(clientId, refreshToken);
+    async refreshToken(
+        @Req() req: Request,
+        @Res() res: Response,
+        @GetCurrentClientId() clientId: string,
+        @GetCurrentUser('refreshToken') refreshToken: string,
+    ) {
+        const response = await this.authService.refreshToken(clientId, refreshToken);
+        return HttpResponseService.response<TokensResponse>(req, res, HttpStatus.OK, response);
     }
 }
