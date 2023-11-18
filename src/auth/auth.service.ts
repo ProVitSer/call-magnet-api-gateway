@@ -11,7 +11,8 @@ import {
     LogoutResponse,
     RegisterUserResponse,
     ResetPasswordResponse,
-    TokensResponse,
+    RefreshTokenResponse,
+    LoginResponse,
 } from '@app/platform-types/auth/interfaces';
 import { VerifyUserResponse } from '@app/platform-types/auth/types';
 import { MessagePatternCmd } from '@app/platform-types/client-proxy/types';
@@ -51,8 +52,8 @@ export class AuthService {
         );
     }
 
-    public async login(data: LoginUserDto): Promise<TokensResponse> {
-        return await firstValueFrom<TokensResponse>(
+    public async login(data: LoginUserDto): Promise<LoginResponse> {
+        return await firstValueFrom<LoginResponse>(
             this.userServiceClient
                 .send({ cmd: MessagePatternCmd.login }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
@@ -67,8 +68,8 @@ export class AuthService {
         );
     }
 
-    public async refreshToken(clientId: string, refreshToken: string): Promise<TokensResponse> {
-        return await firstValueFrom<TokensResponse>(
+    public async refreshToken(clientId: string, refreshToken: string): Promise<RefreshTokenResponse> {
+        return await firstValueFrom<RefreshTokenResponse>(
             this.userServiceClient
                 .send({ cmd: MessagePatternCmd.refreshToken }, { clientId, refreshToken })
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
@@ -78,7 +79,7 @@ export class AuthService {
     public async findUserByClientId(clientId: string) {
         return await firstValueFrom(
             this.userServiceClient
-                .send({ cmd: MessagePatternCmd.findUserByVlientId }, clientId)
+                .send({ cmd: MessagePatternCmd.findUserByClientId }, clientId)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }

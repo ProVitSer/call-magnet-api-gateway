@@ -13,9 +13,9 @@ import { HttpResponseService } from '@app/http/http.service';
 import {
     BaseResponse,
     LogoutResponse,
-    RefreshTokensResponse,
+    RefreshTokenResponse,
     RegisterUserResponse,
-    TokensResponse,
+    LoginResponse,
 } from '@app/platform-types/auth/interfaces';
 import { Request, Response } from 'express';
 import { VerifyUserResponse } from '@app/platform-types/auth/types';
@@ -54,7 +54,7 @@ export class AuthController {
     @Post('login')
     async login(@Req() req: Request, @Res() res: Response, @Body() body: LoginUserDto) {
         const response = await this.authService.login(body);
-        return HttpResponseService.response<TokensResponse>(req, res, HttpStatus.OK, response);
+        return HttpResponseService.response<LoginResponse>(req, res, HttpStatus.OK, response);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -73,6 +73,6 @@ export class AuthController {
         @GetCurrentUser('refreshToken') refreshToken: string,
     ) {
         const response = await this.authService.refreshToken(clientId, refreshToken);
-        return HttpResponseService.response<RefreshTokensResponse>(req, res, HttpStatus.OK, response);
+        return HttpResponseService.response<RefreshTokenResponse>(req, res, HttpStatus.OK, response);
     }
 }
