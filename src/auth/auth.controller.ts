@@ -10,7 +10,13 @@ import { JwtAuthGuard } from './guards/access-token-auth.guard';
 import { GetCurrentUser } from '@app/common/decorators/get-current-user.decorator';
 import { VerifyDto } from './dto/verify-profile.dto';
 import { HttpResponseService } from '@app/http/http.service';
-import { BaseResponse, LogoutResponse, RegisterUserResponse, TokensResponse } from '@app/platform-types/auth/interfaces';
+import {
+    BaseResponse,
+    LogoutResponse,
+    RefreshTokensResponse,
+    RegisterUserResponse,
+    TokensResponse,
+} from '@app/platform-types/auth/interfaces';
 import { Request, Response } from 'express';
 import { VerifyUserResponse } from '@app/platform-types/auth/types';
 
@@ -24,6 +30,7 @@ export class AuthController {
         return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.CREATED, response);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('update-password')
     async updatePassword(@Req() req: Request, @Res() res: Response, @Body() body: UpdatePasswordDto) {
         const response = await this.authService.updatePassword(body);
@@ -37,6 +44,7 @@ export class AuthController {
         return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.OK, response);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Post('verify-user')
     async verifyUser(@Req() req: Request, @Res() res: Response, @Body() body: VerifyDto) {
         const response = await this.authService.verifyUser(body);
@@ -65,6 +73,6 @@ export class AuthController {
         @GetCurrentUser('refreshToken') refreshToken: string,
     ) {
         const response = await this.authService.refreshToken(clientId, refreshToken);
-        return HttpResponseService.response<TokensResponse>(req, res, HttpStatus.OK, response);
+        return HttpResponseService.response<RefreshTokensResponse>(req, res, HttpStatus.OK, response);
     }
 }
