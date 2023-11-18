@@ -13,6 +13,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: process.env.JWT_AT_SECRET,
+            ignoreExpiration: false,
         });
     }
 
@@ -20,7 +21,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
         const user = await this.authService.findUserByClientId(payload.sub);
 
         if (!user) {
-            throw new NotFoundException('User not found');
+            throw new NotFoundException('Пользователь с такими данными не найден');
         }
 
         return {
