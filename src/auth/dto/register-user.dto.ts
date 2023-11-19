@@ -26,8 +26,9 @@ export class RegisterUserDto {
     @IsNotEmpty({ message: EMAIL_IS_NOT_EMPTY })
     email: string;
 
+    @IsString()
     @IsNotEmpty({ message: PHONE_IS_NOT_EMPTY })
-    phoneNumber: number;
+    phoneNumber: string;
 
     @IsString()
     @IsNotEmpty({ message: COMPANY_IS_NOT_EMPTY })
