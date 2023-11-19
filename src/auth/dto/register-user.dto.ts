@@ -6,7 +6,8 @@ import {
     LASTNAME_SHOULD_STRING,
     MIN_LENGTH_PASSWORD,
     PASSWORD_SHOULD_STRING,
-    PHONE_SHOULD_STRING,
+    PHONE_IS_NOT_EMPTY,
+    COMPANY_IS_NOT_EMPTY,
 } from '@app/common/constant/dto.constants';
 import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, MinLength } from 'class-validator';
 
@@ -25,9 +26,12 @@ export class RegisterUserDto {
     @IsNotEmpty({ message: EMAIL_IS_NOT_EMPTY })
     email: string;
 
-    @IsPhoneNumber()
-    @IsNotEmpty({ message: PHONE_SHOULD_STRING })
+    @IsNotEmpty({ message: PHONE_IS_NOT_EMPTY })
     phoneNumber: number;
+
+    @IsString()
+    @IsNotEmpty({ message: COMPANY_IS_NOT_EMPTY })
+    company: string;
 
     @IsNotEmpty({ message: PASSWORD_SHOULD_STRING })
     @MinLength(8, { message: MIN_LENGTH_PASSWORD })
