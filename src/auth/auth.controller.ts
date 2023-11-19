@@ -44,7 +44,6 @@ export class AuthController {
         return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.OK, response);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post('verify-user')
     async verifyUser(@Req() req: Request, @Res() res: Response, @Body() body: VerifyDto) {
         const response = await this.authService.verifyUser(body);
