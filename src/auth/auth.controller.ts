@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Get, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RefreshTokenGuard } from './guards/refresh-token-auth.guard';
 import { GetCurrentClientId } from '@app/common/decorators/get-current-client-id.decorator';
@@ -33,15 +33,15 @@ export class AuthController {
         return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.CREATED, response);
     }
 
-    @Post('update-password')
-    async updatePassword(@Req() req: Request, @Res() res: Response, @Body() body: UpdatePasswordDto) {
-        const response = await this.authService.updatePassword(body);
+    @Post('reset-password')
+    async resetPassword(@Req() req: Request, @Res() res: Response, @Body() body: ResetPasswordDto) {
+        const response = await this.authService.resetPassword(body);
         return HttpResponseService.response<BaseResponse>(req, res, HttpStatus.OK, response);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('forgot-password')
-    async resetPassword(@Req() req: Request, @Res() res: Response, @Body() body: ForgotPasswordDto) {
+    async forgotPassword(@Req() req: Request, @Res() res: Response, @Body() body: ForgotPasswordDto) {
         const response = await this.authService.forgotPassword(body);
         return HttpResponseService.response<ForgotPasswordResponse>(req, res, HttpStatus.OK, response);
     }

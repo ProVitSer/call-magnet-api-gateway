@@ -4,7 +4,7 @@ import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { VerifyDto } from './dto/verify.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import {
     BaseResponse,
@@ -46,10 +46,10 @@ export class AuthService {
         );
     }
 
-    public async updatePassword(data: UpdatePasswordDto): Promise<BaseResponse> {
+    public async resetPassword(data: ResetPasswordDto): Promise<BaseResponse> {
         return await firstValueFrom<BaseResponse>(
             this.userServiceClient
-                .send({ cmd: MessagePatternCmd.updatePassword }, data)
+                .send({ cmd: MessagePatternCmd.resetPassword }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
