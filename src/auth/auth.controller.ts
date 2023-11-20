@@ -1,7 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Get, UseGuards, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { ResetPasswordDto } from './dto/reset-password.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RefreshTokenGuard } from './guards/refresh-token-auth.guard';
@@ -17,10 +16,12 @@ import {
     RegisterUserResponse,
     LoginResponse,
     VerificationCodeResponse,
+    ForgotPasswordResponse,
 } from '@app/platform-types/auth/interfaces';
 import { Request, Response } from 'express';
 import { VerifyUserResponse } from '@app/platform-types/auth/types';
 import { VerificationCodeDto } from './dto/verification-code.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -32,7 +33,6 @@ export class AuthController {
         return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.CREATED, response);
     }
 
-    @UseGuards(JwtAuthGuard)
     @Post('update-password')
     async updatePassword(@Req() req: Request, @Res() res: Response, @Body() body: UpdatePasswordDto) {
         const response = await this.authService.updatePassword(body);
@@ -40,10 +40,10 @@ export class AuthController {
     }
 
     @HttpCode(HttpStatus.OK)
-    @Post('reset-password')
-    async resetPassword(@Req() req: Request, @Res() res: Response, @Body() body: ResetPasswordDto) {
-        const response = await this.authService.resetPassword(body);
-        return HttpResponseService.response<RegisterUserResponse>(req, res, HttpStatus.OK, response);
+    @Post('forgot-password')
+    async resetPassword(@Req() req: Request, @Res() res: Response, @Body() body: ForgotPasswordDto) {
+        const response = await this.authService.forgotPassword(body);
+        return HttpResponseService.response<ForgotPasswordResponse>(req, res, HttpStatus.OK, response);
     }
 
     @Post('verify-user')
