@@ -9,7 +9,7 @@ import {
     PHONE_IS_NOT_EMPTY,
     COMPANY_IS_NOT_EMPTY,
 } from '@app/common/constant/dto.constants';
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class RegisterUserDto {
     @IsString({ message: FIRST_SHOULD_STRING })
