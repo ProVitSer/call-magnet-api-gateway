@@ -8,7 +8,7 @@ import { RefreshTokenGuard } from './guards/refresh-token-auth.guard';
 import { GetCurrentClientId } from '@app/common/decorators/get-current-client-id.decorator';
 import { JwtAuthGuard } from './guards/access-token-auth.guard';
 import { GetCurrentUser } from '@app/common/decorators/get-current-user.decorator';
-import { VerifyDto } from './dto/verify-profile.dto';
+import { VerifyDto } from './dto/verify.dto';
 import { HttpResponseService } from '@app/http/http.service';
 import {
     BaseResponse,
@@ -16,9 +16,11 @@ import {
     RefreshTokenResponse,
     RegisterUserResponse,
     LoginResponse,
+    VerificationCodeResponse,
 } from '@app/platform-types/auth/interfaces';
 import { Request, Response } from 'express';
 import { VerifyUserResponse } from '@app/platform-types/auth/types';
+import { VerificationCodeDto } from './dto/verification-code.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -48,6 +50,12 @@ export class AuthController {
     async verifyUser(@Req() req: Request, @Res() res: Response, @Body() body: VerifyDto) {
         const response = await this.authService.verifyUser(body);
         return HttpResponseService.response<VerifyUserResponse>(req, res, HttpStatus.OK, response);
+    }
+
+    @Post('check-verification-code')
+    async checkVerificationCode(@Req() req: Request, @Res() res: Response, @Body() body: VerificationCodeDto) {
+        const response = await this.authService.checkVerificationCode(body);
+        return HttpResponseService.response<VerificationCodeResponse>(req, res, HttpStatus.OK, response);
     }
 
     @Post('login')
