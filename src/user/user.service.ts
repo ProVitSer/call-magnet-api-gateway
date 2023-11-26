@@ -1,5 +1,5 @@
 import { MessagePatternCmd } from '@app/platform-types/client-proxy/types';
-import { UpdateClientInfoData } from '@app/platform-types/user/interfaces';
+import { ChangePasswordData, UpdateClientInfoData } from '@app/platform-types/user/interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
@@ -28,6 +28,14 @@ export class UserService {
         return await firstValueFrom(
             this.userServiceClient
                 .send({ cmd: MessagePatternCmd.updateClientInfo }, data)
+                .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
+        );
+    }
+
+    public async changePassword(data: ChangePasswordData) {
+        return await firstValueFrom(
+            this.userServiceClient
+                .send({ cmd: MessagePatternCmd.changePassword }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
