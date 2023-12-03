@@ -1,5 +1,10 @@
 import { MessagePatternCmd } from '@app/platform-types/client-proxy/types';
-import { GetClientNotificationsData, MarkNotificationsIsReadData } from '@app/platform-types/notification/interfaces';
+import {
+    DelNotificationData,
+    GetClientNotificationsData,
+    GetNotificationListData,
+    MarkNotificationsIsReadData,
+} from '@app/platform-types/notification/interfaces';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
@@ -20,6 +25,22 @@ export class NotificationService {
         return await firstValueFrom(
             this.userServiceClient
                 .send({ cmd: MessagePatternCmd.markNotificationsIsRead }, data)
+                .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
+        );
+    }
+
+    public async deleteNotification(data: DelNotificationData) {
+        return await firstValueFrom(
+            this.userServiceClient
+                .send({ cmd: MessagePatternCmd.delNotification }, data)
+                .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
+        );
+    }
+
+    public async getNotificationsList(data: GetNotificationListData) {
+        return await firstValueFrom(
+            this.userServiceClient
+                .send({ cmd: MessagePatternCmd.notificationList }, data)
                 .pipe(catchError((error) => throwError(() => new RpcException(error.response)))),
         );
     }
