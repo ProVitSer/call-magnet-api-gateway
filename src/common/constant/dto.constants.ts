@@ -1,0 +1,11 @@
+export const EMAIL_IS_NOT_EMPTY = 'Обезательно должна быть указана почта';
+export const EMAIL_SHOULD_STRING = 'Почта должна быть строкой';
+export const PASSWORD_REQUIRED = 'Обязательно должен быть пароль';
+export const FIRST_SHOULD_STRING = 'Имя должна быть строкой';
+export const LASTNAME_SHOULD_STRING = 'Фамилия должна быть строкой';
+export const PHONE_IS_NOT_EMPTY = 'Должен быть телефонный номер';
+export const PASSWORD_SHOULD_STRING = 'Пароль должна быть строкой';
+export const FIRST_IS_NOT_EMPTY = 'Обезательно должна быть указана Имя';
+export const LASTNAME_IS_NOT_EMPTY = 'Обезательно должна быть указана Фамилия';
+export const MIN_LENGTH_PASSWORD = 'Минимальное кол-во симоволов в пароле должно быть 8';
+export const COMPANY_IS_NOT_EMPTY = 'Обязательно должно быть указано название компании';
